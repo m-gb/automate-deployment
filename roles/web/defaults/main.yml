@@ -1,0 +1,17 @@
+---
+application:
+  base_dir: /var/www
+  name: moth_books
+  ruby_version: 2.4.0
+  secret_key_base: db90ed9c87613fa4ba41bce38d318d1f0b17e66e1488709af437b0bf26967289922c9cf48bbe2f0776940d65efc5ca9b2ca3388317e21ae5da15fa7d04045594
+  user: maya
+  database:
+    name: moth_books_production
+    password: moth_books_password
+    username: moth_books_username
+git:
+  repository:
+    application: https://github.com/m-gb/moth_books.git
+    rbenv: https://github.com/rbenv/rbenv.git
+    rbenv_vars: https://github.com/rbenv/rbenv-vars.git
+    ruby_build: https://github.com/rbenv/ruby-build.git

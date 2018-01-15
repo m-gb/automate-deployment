@@ -1,0 +1,4 @@
+---
+users:
+  - name: root
+    password: root_password

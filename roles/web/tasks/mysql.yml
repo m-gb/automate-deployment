@@ -1,0 +1,8 @@
+---
+- name: create the application database user
+  mysql_user:
+    name: "{{ application.database.username }}"
+    password: "{{ application.database.password }}"
+    priv: '*.*:ALL'
+    state: present
+  become: yes
