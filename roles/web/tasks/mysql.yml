@@ -1,4 +1,32 @@
 ---
+- name: install mysql
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: ['mysql-server','python-mysqldb']
+- name: make sure mysql is running and enabled on startup
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+- name: check if my.cnf exists
+  stat:
+    path: "/root/.my.cnf"
+  register: my_created
+- name: change the root user's password
+  mysql_user:
+    name: "root"
+    password: "{{ application.database.root_password }}"
+    state: present
+  when: not my_created.stat.exists
+- name: create the my.cnf file with login credentials
+  copy:
+    content: 
+    dest: "/root/.my.cnf"
+    owner: "root"
+    group: "root"
+    mode: 0600
+  when: not my_created.stat.exists
 - name: create the application database user
   mysql_user:
     name: "{{ application.database.username }}"
@@ -6,3 +34,19 @@
     priv: '*.*:ALL'
     state: present
   become: yes
+- name: create the application database
+  mysql_db:
+    name: "{{ application.database.name }}"
+    state: present
+- name: install application dependencies
+  shell: "/home/{{ application.username }}/.rbenv/versions/{{ application.ruby_version }}/bin/bundle install --deployment --without development test"
+  args:
+    chdir: "/var/www/{{ application.name }}/"
+  become: yes
+  become_user: "{{ application.username }}"
+- name: compile rails assets and run database migrations
+  shell: "/home/{{ application.username }}/.rbenv/versions/{{ application.ruby_version }}/bin/bundle exec rake assets:precompile db:migrate RAILS_ENV=production"
+  args:
+    chdir: "/var/www/{{ application.name }}/"
+  become: yes
+  become_user: "{{ application.username }}"

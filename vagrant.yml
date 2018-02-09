@@ -2,7 +2,6 @@
 - hosts: default
   roles:
   - common
-  - db
   - web
   # execute this playbook as the root user
   become: yes

@@ -3,9 +3,8 @@ This is a project for automating the deployment of a Ruby on Rails application u
 The playbooks can be tested with Vagrant using the provided Vagrantfile.
 
 There are three main roles:
-- common: the tasks in this playbook will create a user and set the server up for ssh login using ssh keys.
-- db: the tasks in this playbook will install the MySQL database and change the root user account's password.
-- web: the tasks in this playbook will install Git, Ruby, Rails and Apache while also adding a MySQL user for the application.
+- common: the tasks in this playbook will create a user, configure ssh login and update the package manager cache.
+- web: the tasks in this playbook will install Git, Ruby, Rails, MySQL and Apache.
 
 To run this project, Virtualbox, Vagrant and Ansible need to be installed:
 ```

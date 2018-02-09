@@ -1,20 +1,36 @@
 ---
+- name: create application user
+  user:
+    name: "{{ application.username }}"
+    password: "{{ application.password }}"
+    shell: /bin/bash
+    state: present
 - name: install git
   apt:
     name: git
-    update_cache: yes
     state: latest
 - name: clone the application's git repository
   git:
     repo: "{{ git.repository.application }}"
     dest: "/var/www/{{ application.name }}/"
     force: yes
-- name: copy database.yml and secrets.yml
+- name: reassign application folder ownership to application user
+  file:
+    path: "/var/www/{{ application.name }}/"
+    owner: "{{ application.username }}"
+    group: "{{ application.username }}"
+    recurse: yes
+- name: modify access permissions for application config and db folders
+  file:
+    path: "/var/www/{{ application.name }}/{{ item }}"
+    mode: 0700
+  with_items: ['config', 'db']
+- name: create database.yml and secrets.yml
   copy:
     src: "{{ item }}"
     dest: "{{ application.base_dir }}/{{ application.name }}/config/{{ item }}"
-    owner: "{{ application.user }}"
-    group: "{{ application.user }}"
+    owner: "{{ application.username }}"
+    group: "{{ application.username }}"
     mode: 0600
     force: yes
   with_items: ['database.yml', 'secrets.yml']

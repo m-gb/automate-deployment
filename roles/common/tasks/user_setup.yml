@@ -33,3 +33,6 @@
     line: 'PermitRootLogin no'
     state: present
   notify: reload ssh
+- name: resynchronize the package index files from their sources
+  apt:
+    update_cache: yes

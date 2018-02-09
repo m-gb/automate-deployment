@@ -8,6 +8,7 @@ application:
   database:
     name: moth_books_production
     password: moth_books_password
+    root_password: root_password
     username: moth_books_username
 git:
   repository:

@@ -1,8 +1,6 @@
 ---
 - import_tasks: git.yml
-- import_tasks: rbenv.yml
-  become_user: "{{ application.user }}"
+- import_tasks: ruby.yml
 - import_tasks: rails.yml
-  become_user: "{{ application.user }}"
 - import_tasks: mysql.yml
 - import_tasks: apache.yml
